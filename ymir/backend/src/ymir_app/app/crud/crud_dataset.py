@@ -63,19 +63,6 @@ class CRUDDataset(CRUDBase[Dataset, DatasetCreate, DatasetUpdate]):
             return query.offset(offset).limit(limit).all(), query.count()
         return query.all(), query.count()
 
-    def set_datasets_protected(
-        self,
-        db: Session,
-        *,
-        dataset_ids: List[int],
-    ) -> Optional[List[Dataset]]:
-        objs = db.query(self.model).filter(self.model.id.in_(dataset_ids)).all()
-        for obj in objs:
-            obj.is_protected = True
-        db.bulk_save_objects(objs)
-        db.commit()
-        return objs
-
     def update_state(
         self,
         db: Session,
